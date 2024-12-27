@@ -9,27 +9,28 @@ original_file = 'youtube.csv'
 cleaned_file = 'cleaned_data.csv'
 clean_data(original_file, cleaned_file)
 
-# Конфигурация
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model_name = "albert-base-v2"  # Pre-trained ALBERT model
-max_length = 128  # Максимальная длина токена
-batch_size = 16  # Размер batch
-
-tokenizer = AlbertTokenizer.from_pretrained(model_name)
-model = AlbertForSequenceClassification.from_pretrained(model_name, num_labels=3)  # Assuming 3 categories
-model.to(device)
-
 data = pd.read_csv(cleaned_file)
 
 # Валидация данных csv
 required_columns = ["link", "description", "category", "cleaned_title"]
 if not all(col in data.columns for col in required_columns):
-    raise ValueError(f"The CSV file must contain the following columns: {required_columns}")
+    raise ValueError(f"CSV должен содержать колонки: {required_columns}")
 
 # Маппинг категорий на integer для обучения модели
 category_mapping = {label: idx for idx, label in enumerate(data["category"].unique())}
+category_count = len(data["category"].unique())
 data["category"] = data["category"].map(category_mapping)
 print(f"Category Mapping: {category_mapping}")
+
+# Конфигурация
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model_name = "albert-base-v2"  # Преобученная модель ALBERT
+max_length = 128  # Максимальная длина токена
+batch_size = 16  # Размер batch
+
+tokenizer = AlbertTokenizer.from_pretrained(model_name)
+model = AlbertForSequenceClassification.from_pretrained(model_name, num_labels=category_count)
+model.to(device)
 
 # Подготовка данных
 texts = data["cleaned_title"].astype(str).tolist()
