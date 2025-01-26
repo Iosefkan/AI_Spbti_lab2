@@ -154,9 +154,15 @@
 ## 3. Результат выполнения программы
 ```
 Category Mapping: {'travel': 0, 'food': 1, 'art_music': 2, 'history': 3}
-Precision: 0.5865
-Recall: 0.2890
-F1 Score: 0.1984
+
+Epoch 1, Loss: 69.5146
+Epoch 2, Loss: 53.9405
+Epoch 3, Loss: 49.7016
+Precision: 0.9313
+Recall: 0.9292
+F1 Score: 0.9294
+Accuracy: 0.9292
+
 ```
 
 ## 4. Использованные источники
